@@ -159,6 +159,23 @@ user.post('/bookhotel', (req:Request, res:Response)=>{
    
 });
 
+user.get('/bookings',(req:Request, res:Response)=>{
+    /*
+    params:
+    {
+        bookedById:""
+    }
+    */
+    hotelBookings.find(req.body)
+    .then((bookings)=>{
+        res.status(200).json({bookings, response:'Success'});
+    })
+    .catch((err)=>{
+        console.log(err);
+        res.status(500).json({response:'DB error!!'});
+    });
+});
+
 
 //Cancel API
 const cancelled = "cancelled";

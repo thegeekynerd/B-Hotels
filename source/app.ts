@@ -1,18 +1,24 @@
 import express , {Application, Request, Response} from "express";
 import mongoose, { Connection, Mongoose} from "mongoose";
 import bodyParser from 'body-parser';
+import * as dotenv from "dotenv";
 
 import User from './user/user-route';
 import Admin from './admin/admin-route';
 
+dotenv.config({path: __dirname+'/.env'});
+// console.log(__dirname+'/.env')
+
 const app:Application = express();
 
 // const mongodb:string = "mongodb://localhost:27017/bhotels";
-const mongodb:string = "mongodb+srv://ah7886:thisisatestdatabase@cluster0.oefpk.mongodb.net/bhotels?retryWrites=true&w=majority";
+const mongodb:any = process.env.DB_URL;
 mongoose.connect(mongodb);
 const db:Connection = mongoose.connection;
 db.once('open', ()=>console.log("Connection made to DB"));
 db.on('error', (error)=>console.log(error));
+
+// console.log(process.env)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
