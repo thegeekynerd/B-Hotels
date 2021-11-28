@@ -160,4 +160,50 @@ user.post('/bookhotel', (req:Request, res:Response)=>{
 });
 
 
+//Cancel API
+const cancelled = "cancelled";
+const completed = "completed";
+
+user.post('/cancelbooking', (req:Request, res:Response)=>{
+    /*
+    params:
+    {
+        "booking_id":
+    }
+    */
+    hotelBookings.findOneAndUpdate({booking_id:req.body.booking_id}, {status:cancelled})
+    .then(booking =>{
+        if(booking==null)
+            return null
+        // console.log(booking, 'cancelled')
+        return hotelDetails.findById(booking.bookedAtId)
+    })
+    .then(hotel=>{
+        if(hotel==null)
+            return null
+        let rooms:any = [];
+        // console.log(hotel);
+        hotel.roomsBooked.forEach((obj:any)=>{
+            if(obj.bookingId!=req.body.booking_id)
+                rooms.push(obj);
+        });
+        // console.log(rooms)
+        return hotelDetails.findByIdAndUpdate(hotel._id, {roomsBooked:rooms});
+    })
+    .then(updatedHotel =>{
+        if(updatedHotel==null)
+            res.status(404).json({response:'No booking by this id or some error!!'});
+        else
+        res.status(200).json({respsonse:"Booking cancelled", booking_id:req.body.booking_id,})
+    })
+    .catch((err)=>
+    {
+        console.log(err)
+        res.status(500).json({response:'DB error!'})
+    });
+});
+
+
+
+
 export default user;

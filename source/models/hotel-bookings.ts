@@ -9,8 +9,9 @@ interface hotelB
     bookedAtId:ObjectId,
     roomsBooked:Number,//number or numbers of rooms booked
     bookedFrom:Date,
-    bookedTill:Date
-    feedback?:string
+    bookedTill:Date,
+    feedback?:string,
+    status?:string
 }
 
 const hotelBookingSchema = new Schema<hotelB>({
@@ -22,7 +23,8 @@ const hotelBookingSchema = new Schema<hotelB>({
     roomsBooked:Number,
     bookedFrom:Date,
     bookedTill:Date,
-    feedback:String
+    feedback:String,
+    status:String
 
 });
 
