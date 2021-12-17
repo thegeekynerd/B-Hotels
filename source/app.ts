@@ -26,6 +26,15 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use('/user', User);
 app.use('/admin',Admin);
 
+app.use((e:Error,req:Request,res:Response,next:any)=>{
+    if(e)
+    {
+        console.log("lolo",e);
+        return res.sendStatus(400).json({resp:"Bad Request!!!"});
+        return next();
+    }
+});
+
 app.get('/', (req:Request , res:Response)=>{
     res.json({status:200, response: "Hello"});
 });
